@@ -14,13 +14,21 @@ public class ConexionBD implements IConexionBD {
 
     private static ConexionBD instancia;
     private Connection con;
+    private String conexion;
 
-    private ConexionBD() {
+    private ConexionBD(String conexion) {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException ex) {
+            ex.printStackTrace();
+        }
+        this.conexion = conexion;
+
     }
 
-    public static ConexionBD getInstancia() {
+    public static ConexionBD getInstancia(String conexion) {
         if (instancia == null) {
-            instancia = new ConexionBD();
+            instancia = new ConexionBD(conexion);
         }
 
         return instancia;
@@ -30,7 +38,7 @@ public class ConexionBD implements IConexionBD {
     @Override
     public void conectar() {
         try {
-            con = DriverManager.getConnection("jdbc:h2:mem:testdb");
+            con = DriverManager.getConnection(conexion);
 
         } catch (SQLException ex) {
             Logger.getLogger(ConexionBD.class.getName()).log(Level.SEVERE, null, ex);
